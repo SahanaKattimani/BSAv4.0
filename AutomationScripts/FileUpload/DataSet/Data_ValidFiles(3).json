@@ -1,0 +1,44 @@
+[
+	{
+		"LoginURL": "https://accounts.dev.finezza.in",	
+		"URL": "https://multitenancy.dev.finezza.in",
+		"contextId": "43982",
+		"applicationId": "5",	
+		"username": "system",
+		"password": "password",
+		"refNumber" : "11111",
+                "callbackUrl" : "",
+                "purpose" : "Expansion Capital",
+                "proposedAmount" : "9000000",
+                "firm_name" : "Newfirm_Testing",
+                "firm_turnover" : "85374905",
+                "firm_cin" : "563489",
+                "firm_pincode": "560040",
+                "tenure" : "58739058",
+                "contact_firstName" : "Test_Sahana16-04-2020",
+                "contact_middleName" : "abc",
+                "contact_lastName" : "testing",
+                "contact_dob" : "Wed, 25 Mar 1967 16:43:05 GMT",
+                "contact_panCard" : "BRGPK1234L",
+                "contact_aadharCard" : "547274836538",
+                "contact_addressLine1" : "Bengaluru",
+                "contact_city" : "BENGALURU",
+                "contact_pincode" : "560040",
+                "contact_state" : "KARNATAKA",
+                "contact_gender" : "Female",
+                "accountNumber": "675675768",
+                "ifscCode": "bandhan",
+	 	"bankId": "39",
+        	"accountType": "1",
+                "accountName": "Sahana_Test1",
+                "FileUploadPATH": "/Users/gatim/Postman/files/ea79ab1d-d165-4779-a1c2-38b7d51a8ff3.pdf",
+	        "BankAccountPassword": "AccountPassword",
+		"File1": "/Users/gatim/Postman/files/22e35e80-31e2-4160-a83a-8bd05b235378.pdf",
+                "File2": "/Users/gatim/Postman/files/43773efa-89f6-4ebc-b3d3-7904e894d26b.pdf",
+                "File3": "/Users/gatim/Postman/files/ea79ab1d-d165-4779-a1c2-38b7d51a8ff3.pdf",
+                "FilePassword": "password"
+	}
+
+]
+
+

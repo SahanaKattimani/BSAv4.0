@@ -1,0 +1,45 @@
+[
+
+    //------------- This is to understand usage of data file. This file cannot be run as data file with collection as it is without any modification.---------------
+
+    {
+
+    // ------- Authentication --------
+    
+        "LoginURL": "http://accounts.local.gromor.in:8012", 
+        "URL": "http://portal.local.gromor.in:8014",
+        
+    
+    //------ User Credentials -------
+              
+        "username": "system",
+        "password": "password",
+        
+    //------ Create Bank Account parameters --------
+        
+        "accountNumber": "1",
+        "ifscCode": "icici",
+        "bankId": "9",
+        "accountType": "1",
+        "accountName": "Sahana_Test1",
+
+    //------ Create Document object -------
+        //-----The commented parameters should not be altered as they are set as global variables dynamically ------
+
+        "originalName" : "2c4790e0-d1ee-4545-b065-6cf369703828.pdf",
+        "documentType" : "BANK_STATEMENT",
+        "documentName" : "85265257-1658-4b9f-aac2-bfca5554ef91.pdf",
+        "status" : "QUEUE",
+        "source" : "https://devonly.s3.ap-south-1.amazonaws.com/85265257-1658-4b9f-aac2-bfca5554ef91.pdf",
+        //"appId" : "{{ApplicationId}}",
+        //"passwordForDocument" : "", 
+        // "bankAccount": {
+        //         "createdDate": "{{CreatedDate}}",
+        //         "id": "{{BankAccountId}}",
+        //         "accountName": "{{AccountName}}",
+        //         "accountNumber": "{{BankAccountNumber}}",
+        //         "accountType": "{{AccountType}}",
+        //         "ifscCode": "{{IfscCode}}",
+        //         "bankId": "{{BankId}}"
+    }
+]

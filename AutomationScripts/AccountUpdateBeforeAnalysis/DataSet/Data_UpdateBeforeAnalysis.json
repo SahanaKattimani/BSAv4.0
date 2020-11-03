@@ -1,0 +1,44 @@
+[
+	{
+		"LoginURL": "https://accounts.dev.finezza.in",	
+		"URL": "https://multitenancy.dev.finezza.in",	
+		"username": "system",
+		"password": "password",
+		"refNumber" : "11111",
+                "callbackUrl" : "",
+                "purpose" : "Expansion Capital",
+                "proposedAmount" : "9000000",
+                "firm_name" : "Newfirm_Testing",
+                "firm_turnover" : "85374905",
+                "firm_cin" : "563489",
+                "firm_pincode": "560040",
+                "tenure" : "58739058",
+                "contact_firstName" : "Test_Sahana16-04-2020",
+                "contact_middleName" : "abc",
+                "contact_lastName" : "testing",
+                "contact_dob" : "Wed, 25 Mar 1967 16:43:05 GMT",
+                "contact_panCard" : "BRGPK1234L",
+                "contact_aadharCard" : "547274836538",
+                "contact_addressLine1" : "Bengaluru",
+                "contact_city" : "BENGALURU",
+                "contact_pincode" : "560040",
+                "contact_state" : "KARNATAKA",
+                "contact_gender" : "Female",
+
+                "accountNumber": "7890",
+                "ifscCode": "bandhan",
+	 	"bankId": "39",
+        	"accountType": "1",
+                "accountName": "Sahana_Test1",
+                "BankAccountPassword": "AccountPassword",
+                
+                "NewAccountName" : "Sahana_Test1",
+                "NewAccountNumber" : "65663212295",
+                "NewAccountType": "1",
+                "NewIfscCode": "bandhan",
+                "NewBankId": "39",
+                "NewBankAccountPassword": "NewAccountPassword"
+        }
+
+]
+

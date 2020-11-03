@@ -1,0 +1,1013 @@
+{
+	"info": {
+		"_postman_id": "cd060fae-9bdc-4194-8e85-f6b9d60d2bbd",
+		"name": "Script_DeleteFileAfterAnalysis",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "282ae851-f098-4813-86fb-21df1e795b18",
+						"exec": [
+							"var response = pm.response.json();",
+							"",
+							"//Validate Status Code",
+							"pm.test(\"Authentication Successful\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"//Assert LoginURL",
+							"pm.test(\"LoginURL has to be valid \", function () {",
+							"    pm.expect(pm.globals.get(\"LoginURL\")).to.have.string;",
+							"    pm.expect(pm.globals.get(\"LoginURL\")).to.not.equal(null);",
+							"});",
+							"",
+							"//Assert Session Id",
+							"pm.test(\"Session ID : \" + response.sessionId, function () {",
+							"        pm.globals.set(\"SESSION_ID\", response.sessionId);",
+							"        pm.expect(response.sessionId).to.have.string;",
+							"        pm.expect(response.sessionId).to.not.equal(null);",
+							"    });",
+							"",
+							"//Assert Username",
+							"pm.test(\"Username has to be valid \", function () {",
+							"        pm.expect(pm.globals.get(\"username\")).to.have.string;",
+							"        pm.expect(pm.globals.get(\"username\")).to.not.equal(null);",
+							"        pm.expect(response.username).to.have.string;",
+							"        pm.expect(response.username).to.not.equal(null);",
+							"    });",
+							"",
+							"//Asssert Password",
+							"pm.test(\"Password has to be valid \", function () {",
+							"        pm.expect(pm.globals.get(\"password\")).to.have.string;",
+							"        pm.expect(pm.globals.get(\"password\")).to.not.equal(null);",
+							"    });",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"{{username}}\",\n\t\"password\": \"{{password}}\"\n}"
+				},
+				"url": {
+					"raw": "{{LoginURL}}/public/auth/login",
+					"host": [
+						"{{LoginURL}}"
+					],
+					"path": [
+						"public",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create New Application",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "918547a5-fdd4-49d7-94a0-6c0d53d4b5c1",
+						"exec": [
+							"var response = pm.response.json();",
+							"pm.globals.set(\"ApplicationId\", response.id);",
+							"",
+							"//Function to check if number is positive",
+							"function isPositiveInteger(x) {",
+							"    if(Number.isInteger(x) && x > 0)",
+							"    return true;",
+							"    ",
+							"    else",
+							"    return false;",
+							"} ",
+							"",
+							"//Function to do panCard validation : \"BLRTY8764L\"",
+							"function panCardValidation(panNumber) ",
+							"{",
+							"    var regpan = /^([a-zA-Z]){5}([0-9]){4}([a-zA-Z]){1}?$/;",
+							"    if(regpan.test(panNumber))",
+							"        return true;",
+							"    else ",
+							"        return false;",
+							"}",
+							"",
+							"//Function to check valid pinCode",
+							"function pinCodeFormat(pinCode) ",
+							"{",
+							"    var regpan = /^[1-9][0-9]{5}$/;",
+							"    if(regpan.test(pinCode))",
+							"        return true;",
+							"    else",
+							"        return false;",
+							"}",
+							"",
+							"//Function to map pincode-city-state validation: 560040-Bengaluru-Karnataka",
+							"function pinCodeValidation(pinCode, city, state) ",
+							"{",
+							"    var regpan = /^[1-9][0-9]{5}$/;",
+							"    if(regpan.test(pinCode) && city == \"BENGALURU\" && state == \"KARNATAKA\")",
+							"        return true;",
+							"    else ",
+							"        return false;",
+							"}",
+							"",
+							"",
+							"//Function to determine age : \"Wed, 25 Mar 1967 16:43:05 GMT\"",
+							"//Function to check range of tenure",
+							"",
+							"",
+							"pm.test(\"Status code is 200\", function (){",
+							"        pm.response.to.have.status(200);",
+							"    ",
+							"    //Assert Reference Id",
+							"    pm.test(\"Please enter valid Reference Id\", function () {",
+							"          pm.expect(response.refNumber).to.have.string;",
+							"          pm.expect(response.refNumber).to.not.be.null;",
+							"          pm.expect(response.refNumber).to.not.be.empty;});",
+							"",
+							"    //Assert Firm Name    ",
+							"    pm.test(\"Firm name has to be string\", function () {",
+							"          pm.expect(typeof(response.firm.name)).to.equal('string');",
+							"          pm.expect(response.firm.name).to.not.be.empty;",
+							"          pm.expect(response.firm).to.have.property('name');});",
+							"",
+							"     //Assert Turn over",
+							"     pm.test(\"Firm's turnover has to be positive number\", function () {",
+							"          pm.expect(response.firm.turnover).to.be.a('number'); ",
+							"          pm.expect(isPositiveInteger(response.firm.turnover)).to.be.true;",
+							"          pm.expect(response.firm.turnover).to.not.be.null;",
+							"          pm.expect(response.firm).to.have.property('turnover');});",
+							"",
+							"     //Assert Proposed Amount",
+							"     pm.test(\"Proposed amount has to be a positive number\", function () {",
+							"          pm.expect(response.proposedAmount).to.be.a('number');  ",
+							"          pm.expect(isPositiveInteger(response.proposedAmount)).to.be.true;",
+							"          pm.expect(response.proposedAmount).to.not.be.null;});",
+							"",
+							"      //Assert Tenure ",
+							"      pm.test(\"Tenure has to be positive number\", function () {",
+							"          pm.expect(response.tenure).to.be.a('number');   ",
+							"          pm.expect(isPositiveInteger(response.tenure)).to.be.true;",
+							"          pm.expect(response.tenure).to.not.be.null;",
+							"          pm.expect(response.firm).to.have.property('turnover');});",
+							"",
+							"       //Assert Purpose   ",
+							"       pm.test(\"Purpose has to be a string\", function () {",
+							"           pm.expect(response.purpose).to.have.string;",
+							"           pm.expect(response.purpose).to.be.oneOf(['Working Capital', 'Equipment Finance', 'Expansion Capital', 'Personal Loan']);",
+							"           pm.expect(response.purpose).to.not.be.null;",
+							"           pm.expect(response.purpose).to.not.be.empty;});",
+							"",
+							"         //Assert First Name    ",
+							"         pm.test(\"First Name has to be String\", function () {",
+							"           pm.expect(response.contact.firstName).to.have.string;",
+							"           pm.expect(response.contact.firstName).to.not.be.empty;",
+							"           pm.expect(response.contact).to.have.property('firstName');});",
+							"",
+							"          //Assert Gender",
+							"          pm.test(\"Gender of the Applicant has to be in string format\", function () {",
+							"            pm.expect(response.contact.gender).to.have.string;",
+							"            pm.expect(response.contact.gender).to.be.oneOf(['Male', 'Female']);",
+							"            pm.expect(response.contact.gender).to.not.be.empty;",
+							"            pm.expect(response.contact).to.have.property('gender');});",
+							"",
+							"          //Assert Date of Birth",
+							"          pm.test(\"Date of Birth has to be String\", function () {",
+							"             pm.expect(response.contact.dob).to.have.string;",
+							"             pm.expect(response.contact.dob).to.not.be.null;",
+							"             pm.expect(response.contact).to.have.property('dob');});",
+							"",
+							"          //Assert PAN Number ",
+							"          pm.test(\"PAN Details has to be in valid format\", function () {",
+							"             pm.expect(response.contact.panCard).to.have.string;",
+							"             pm.expect(panCardValidation(response.contact.panCard)).to.be.equal(true, response.contact.panCard + ' Is  Invalid Format');",
+							"             pm.expect(response.contact.panCard).to.not.be.empty;",
+							"             pm.expect(response.contact).to.have.property('panCard');});",
+							"",
+							"          //Assert AddressLine1    ",
+							"          pm.test(\"Address Line1 has to be in string format\", function () {",
+							"             pm.expect(response.contact.addressLine1).to.have.string;",
+							"             pm.expect(response.contact.addressLine1).to.not.be.empty;",
+							"             pm.expect(response.contact).to.have.property('addressLine1');});",
+							"",
+							"          //Assert Pincode    ",
+							"          pm.test(\"Pincode has to be in valid format\", function () {",
+							"             pm.expect(pinCodeFormat(response.contact.pincode)).to.be.true;",
+							"             pm.expect(response.contact.pincode).to.not.be.empty;",
+							"             pm.expect(response.contact).to.have.property('pincode');});",
+							"",
+							"           //Assert City",
+							"           pm.test(\"City has to match the pincode-city mapping\", function () {",
+							"              pm.expect(response.contact.city).to.have.string;",
+							"              pm.expect(pinCodeValidation(response.contact.pincode, response.contact.city, response.contact.state)).to.be.true;",
+							"              pm.expect(response.contact.city).to.not.be.empty;",
+							"              pm.expect(response.contact).to.have.property('city');});",
+							"",
+							"            //Assert State",
+							"            pm.test(\"State name in which city is located has to match the pincode-city-state mapping\", function () {",
+							"               pm.expect(response.contact.state).to.have.string;",
+							"               pm.expect(pinCodeValidation(response.contact.pincode, response.contact.city, response.contact.state)).to.be.true;",
+							"               pm.expect(response.contact.state).to.not.be.empty;",
+							"               pm.expect(response.contact).to.have.property('state');});",
+							"});",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n        \"refNumber\" : \"{{refNumber}}\",\n        \"callbackUrl\" : \"{{callbackUrl}}\",\n        \"purpose\" : \"{{purpose}}\",\n        \"proposedAmount\" : {{proposedAmount}},\n        \"firm\" : {\n                \"name\" : \"{{firm_name}}\",\n                \"turnover\": \"{{firm_turnover}}\",\n                \"cin\" : \"{{firm_cin}}\",\n                \"pincode\": \"{{firm_pincode}}\"\n        },\n        \"tenure\" : {{tenure}},\n        \"contact\" : {\n                \"firstName\" : \"{{contact_firstName}}\",\n                \"middleName\" : \"{{contact_middleName}}\",\n                \"lastName\" : \"{{contact_lastName}}\",\n                \"dob\" : \"{{contact_dob}}\",\n                \"panCard\" : \"{{contact_panCard}}\",\n                \"aadharCard\" : \"{{contact_aadharCard}}\",\n                \"addressLine1\" : \"{{contact_addressLine1}}\",\n                \"city\" : \"{{contact_city}}\",\n                \"pincode\" : \"{{contact_pincode}}\",\n                \"state\" : \"{{contact_state}}\",\n                \"gender\" : \"{{contact_gender}}\"\n        }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{URL}}/api/application?sessionid={{SESSION_ID}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"application"
+					],
+					"query": [
+						{
+							"key": "sessionid",
+							"value": "{{SESSION_ID}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Bank Account Object",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "9663369d-6481-4531-83d7-1e0afe16a609",
+						"exec": [
+							"var response = pm.response.json();",
+							"",
+							"pm.globals.set(\"CreatedAccount\", response);",
+							"",
+							"console.log(response);",
+							"",
+							"pm.globals.set(\"ApplicationAccountId\", response.id);",
+							"pm.globals.set(\"CreatedDate\", response.bankDetail.createdDate);",
+							"pm.globals.set(\"BankAccountId\", response.bankDetail.id);",
+							"pm.globals.set(\"AccountName\", response.bankDetail.accountName);",
+							"pm.globals.set(\"BankAccountNumber\", response.bankDetail.accountNumber);",
+							"pm.globals.set(\"AccountType\", response.bankDetail.accountType);",
+							"pm.globals.set(\"IfscCode\", response.bankDetail.ifscCode);",
+							"pm.globals.set(\"BankId\", response.bankDetail.bankId);",
+							"",
+							"//Validate Status of Response",
+							"pm.test(\"Status code is 200\", function () {",
+							"     pm.response.to.have.status(200);",
+							" });",
+							"",
+							"",
+							"//Function to check if number is positive",
+							"function isPositiveInteger(x) {",
+							"    if(Number.isInteger(x) && x > 0)",
+							"    return true;",
+							"    ",
+							"    else",
+							"    return false;",
+							"} ",
+							"    ",
+							"",
+							"",
+							"//Assertions to check if mandatory fields are empty",
+							"",
+							"pm.test(\"Account name has to be string\", function () {",
+							"     pm.expect(response.bankDetail.accountName).to.have.string;",
+							"     pm.expect(response.bankDetail.accountName).to.not.equal(null);",
+							"     pm.expect(response.bankDetail.accountName).to.not.be.empty;",
+							"    });",
+							"",
+							"pm.test(\"Account number has to be a valid\", function () {",
+							"     pm.expect(response.bankDetail.accountNumber).to.have.string;",
+							"     pm.expect(response.bankDetail.accountNumber).to.not.equal(null);",
+							"    });",
+							" ",
+							"pm.test(\"Account Type has to be a number\", function () {",
+							"     pm.expect(response.bankDetail.accountType).to.be.a('number');",
+							"     pm.expect(response.bankDetail.accountType).to.be.oneOf([1,2,3,4]);",
+							"    });",
+							" ",
+							"pm.test(\"Ifsc Code has to be a string\", function () {",
+							"     pm.expect(response.bankDetail.ifscCode).to.have.string;",
+							"     pm.expect(response.bankDetail.ifscCode).to.not.equal(null);",
+							"     pm.expect(response.bankDetail.ifscCode).to.not.be.empty; ",
+							"    });",
+							" ",
+							"pm.test(\"Bank Id has to be a number\", function () {",
+							"     pm.expect(response.bankDetail.bankId).to.be.a('number');  //check",
+							"     pm.expect(isPositiveInteger(response.bankDetail.bankId)).to.be.true;",
+							"     pm.expect(response.bankDetail.bankId).to.be.below(300);",
+							"     pm.expect(response.bankDetail.bankId).to.not.equal(null);",
+							"    });",
+							" ",
+							"",
+							"",
+							" "
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"accountNumber\": {{accountNumber}},\n    \"ifscCode\": \"{{ifscCode}}\",\n    \"bankId\": {{bankId}},\n    \"accountType\": {{accountType}},\n    \"accountName\": \"{{accountName}}\"\n}"
+				},
+				"url": {
+					"raw": "{{URL}}/api/application/{{ApplicationId}}/createBankAccount?password={{BankAccountPassword}}&sessionid={{SESSION_ID}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"application",
+						"{{ApplicationId}}",
+						"createBankAccount"
+					],
+					"query": [
+						{
+							"key": "password",
+							"value": "{{BankAccountPassword}}"
+						},
+						{
+							"key": "sessionid",
+							"value": "{{SESSION_ID}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "File Upload",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f19cf68c-2763-4564-9327-f104c9aad23b",
+						"exec": [
+							"var response = pm.response.json();",
+							"var objFileDetails = {};",
+							"var arrFileDetails = [];",
+							" ",
+							"if(response.length !== 0)",
+							"{",
+							"    for(var x = 0; x < response.length; x++)",
+							"    {",
+							"        var fileId =  response[x].id;",
+							"        objFileDetails[fileId] = { ",
+							"            id : response[x].id,",
+							"            source : response[x].source,",
+							"            documentName : response[x].documentName,",
+							"            originalName : response[x].originalName",
+							"        }",
+							"        arrFileDetails.push(objFileDetails[fileId]);",
+							"    }",
+							"    pm.globals.set(\"FileDetails\", arrFileDetails);",
+							"    console.log(arrFileDetails);",
+							"    ",
+							"    for(var x = 0; x < pm.globals.get(\"FileDetails\").length; x++)",
+							"        {",
+							"            pm.test(\"Displaying global variable at index : \" + x);",
+							"            pm.test(pm.globals.get(\"FileDetails\")[x].id);",
+							"            pm.test(pm.globals.get(\"FileDetails\")[x].source);",
+							"            pm.test(pm.globals.get(\"FileDetails\")[x].documentName);",
+							"            pm.test(pm.globals.get(\"FileDetails\")[x].originalName);",
+							"           ",
+							"        }",
+							"}    ",
+							"",
+							"//Validate Status code of response ",
+							" pm.test(\"Status code is 200\", function () {",
+							"     pm.response.to.have.status(200);",
+							" });"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file1",
+							"type": "file",
+							"src": "{{File1}}"
+						},
+						{
+							"key": "file2",
+							"type": "file",
+							"src": [],
+							"disabled": true
+						},
+						{
+							"key": "file3",
+							"type": "file",
+							"src": [],
+							"disabled": true
+						},
+						{
+							"key": "file4",
+							"type": "file",
+							"src": [],
+							"disabled": true
+						},
+						{
+							"key": "file5",
+							"type": "file",
+							"src": [],
+							"disabled": true
+						},
+						{
+							"key": "file6",
+							"type": "file",
+							"src": [],
+							"disabled": true
+						},
+						{
+							"key": "file8",
+							"type": "file",
+							"src": [],
+							"disabled": true
+						},
+						{
+							"key": "",
+							"type": "file",
+							"src": [],
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{URL}}/api/fileupload/?applicationId={{ApplicationId}}&accountDetailId={{BankAccountId}}&password={{FilePassword}}&sessionid={{SESSION_ID}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"fileupload",
+						""
+					],
+					"query": [
+						{
+							"key": "applicationId",
+							"value": "{{ApplicationId}}"
+						},
+						{
+							"key": "accountDetailId",
+							"value": "{{BankAccountId}}"
+						},
+						{
+							"key": "password",
+							"value": "{{FilePassword}}"
+						},
+						{
+							"key": "sessionid",
+							"value": "{{SESSION_ID}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch list of files",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "bedd8093-da6f-4bad-bd79-8176a94c08a3",
+						"exec": [
+							"var response = pm.response.json();",
+							"var fileCount = 0;",
+							"",
+							"var moment = require('moment');",
+							"console.log(\"Displaying : require('moment') : \" + moment);",
+							"",
+							"var timeStamp = pm.globals.get(\"timeStamp\");",
+							"console.log(\"Displaying TimeStamp : \" + timeStamp);",
+							"",
+							"if (!timeStamp) { //create new Timestamp (now + 360 seconds)",
+							"    timeStamp = moment().add(360, 'seconds');",
+							"    pm.globals.set(\"timeStamp\", timeStamp);",
+							"    console.log(\"New TimeStamp : \" + timeStamp);",
+							"}",
+							"",
+							"",
+							"if (pm.response.to.have.status(200)) {",
+							"    if (moment() < moment(pm.globals.get(\"timeStamp\"))) { //request is within 360 seconds",
+							"",
+							"        for (var x = 0; x < response.length; x++) {",
+							"            console.log(\"Inside For loop\");",
+							"",
+							"            pm.test(\"File Status of file at index : \" + x + \" is \" + response[x].status);",
+							"",
+							"            if (response[x].status == \"PARSED\" || response[x].status == \"DELETED\" || response[x].status == \"NON PARSABLE\" || response[x].status == \"VALIDATING\" || response[x].status == \"VALIDATION\") {",
+							"                fileCount = fileCount + 1;",
+							"                console.log(\"Inside If to check file status : \" + response[x].status);",
+							"                if (fileCount == response.length) {",
+							"                    console.log(\"File Count to go and check Analysis status : \" + fileCount);",
+							"                    postman.setNextRequest(\"Fetch Bank Account Object and Application Mapping as parent object\");",
+							"                }",
+							"                else",
+							"                    continue;",
+							"            }",
+							"            else {",
+							"                console.log(\"Inside else to fetch file status : \" + response[x].status);",
+							"                postman.setNextRequest(\"Fetch list of files\");",
+							"            }",
+							"        }",
+							"    }",
+							"    else { //360 seconds exceeded",
+							"        pm.test(\"Set time limit is exceeded\", function () {",
+							"            pm.expect.fail();",
+							"        });",
+							"        console.log(\"Stopping tests. 360 seconds exceeded.\");",
+							"        postman.setNextRequest(null);",
+							"        pm.globals.unset(\"timeStamp\");",
+							"    }",
+							"}",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e8bb6af4-14dd-4da6-81ae-5ae975c69a6a",
+						"exec": [
+							"setTimeout(function(){}, 10000);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{URL}}/api/application/{{ApplicationId}}/bankAccount/{{ApplicationAccountId}}/fileStatus?sessionid={{SESSION_ID}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"application",
+						"{{ApplicationId}}",
+						"bankAccount",
+						"{{ApplicationAccountId}}",
+						"fileStatus"
+					],
+					"query": [
+						{
+							"key": "sessionid",
+							"value": "{{SESSION_ID}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch Bank Account Object and Application Mapping as parent object",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "baad8627-b49e-436a-be60-5907a684656f",
+						"exec": [
+							"var response = pm.response.json();",
+							"",
+							"var moment = require('moment');",
+							"console.log(\"Displaying : require('moment') : \" + moment);",
+							"",
+							"var timeStamp = pm.globals.get(\"timeStamp\");",
+							"console.log(\"Displaying TimeStamp : \" + timeStamp);",
+							"",
+							"if (!timeStamp) { //create new Timestamp (now + 240 seconds)",
+							"    timeStamp = moment().add(240, 'seconds');",
+							"    pm.globals.set(\"timeStamp\", timeStamp);",
+							"    console.log(\"New TimeStamp : \" + timeStamp);",
+							"}",
+							"",
+							"",
+							"",
+							"if (pm.response.to.have.status(200)) {",
+							"    if (moment() < moment(pm.globals.get(\"timeStamp\"))) { //request is within 120 seconds",
+							"",
+							"        pm.test(\"Response Status of Analysis : \" + response.status);",
+							"        if (response.status == \"ANALYSED\") {",
+							"            pm.test(\"Analysis completed and the status at account level is : \" + response.status);",
+							"            postman.setNextRequest(\"Fetch Analysed Data\");",
+							"        }",
+							"",
+							"        else if (response.status == \"IN REVIEW\" || response.status == \"ON HOLD\") {",
+							"            pm.test(\"Analysis failed -> Status of Response is : \" + response.status, function(){",
+							"                pm.expect.fail();",
+							"            });",
+							"            postman.setNextRequest(null);",
+							"        }",
+							"        else {",
+							"            pm.test(\"Analysis is still in process and the Status is : \" + response.status);",
+							"            postman.setNextRequest(\"Fetch Bank Account Object and Application Mapping as parent object\");",
+							"        }",
+							"    }",
+							"    else { //240 seconds exceeded",
+							"        pm.test(\"Set time limit is exceeded\", function () {",
+							"            pm.expect.fail();",
+							"        });",
+							"        console.log(\"Stopping tests. 240 seconds exceeded.\");",
+							"        postman.setNextRequest(null);",
+							"        pm.globals.unset(\"timeStamp\");",
+							"    }",
+							"",
+							"}",
+							"",
+							"//Validate Status of response code",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "a82b33d8-fb1f-438d-91e9-50229d696e7b",
+						"exec": [
+							"setTimeout(function(){}, 5000);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{URL}}/api/application/{{ApplicationId}}/applicationBankAccount/{{ApplicationAccountId}}?sessionid={{SESSION_ID}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"application",
+						"{{ApplicationId}}",
+						"applicationBankAccount",
+						"{{ApplicationAccountId}}"
+					],
+					"query": [
+						{
+							"key": "sessionid",
+							"value": "{{SESSION_ID}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Fetch Analysed Data",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "ed5c0ff7-86a5-4fc1-9570-4ac775f53c0c",
+						"exec": [
+							"var response = pm.response.json();",
+							"",
+							"//Poller to poll till analysed data is obtained",
+							"var moment = require('moment');",
+							"console.log(\"Displaying : require('moment') : \" + moment);",
+							"",
+							"var timeStamp = pm.globals.get(\"timeStamp\");",
+							"console.log(\"Displaying TimeStamp : \" + timeStamp);",
+							"",
+							"if (!timeStamp) { //create new Timestamp (now + 240 seconds)",
+							"    timeStamp = moment().add(240, 'seconds');",
+							"    pm.globals.set(\"timeStamp\", timeStamp);",
+							"    console.log(\"New TimeStamp : \" + timeStamp);",
+							"}",
+							"",
+							"if (pm.response.status === \"OK\") {",
+							"    pm.test(\"Inside if - Status OK\")",
+							"    if (moment() < moment(pm.globals.get(\"timeStamp\"))) { //request is within 120 seconds",
+							"        pm.test(\" Inside if - moment is less than timestamp defined\");",
+							"        if (!response) {",
+							"            pm.test(\"Response not empty\");",
+							"            pm.test(\"Fetching Analysed Data : \");",
+							"            postman.setNextRequest(\"Fetch Analysed Data\");",
+							"        }",
+							"        else {",
+							"            //Assigning first File Id among the uploaded files to be deleted.",
+							"            var fileDetails = pm.globals.get(\"FileDetails\");",
+							"            if(fileDetails.length !== 0) {",
+							"                pm.globals.set(\"FileId\", fileDetails[0].id);",
+							"                pm.test(\"FileId to be deleted is \" + pm.globals.get(\"FileId\"));",
+							"            }",
+							"",
+							"            pm.test(\"Analysed Data Successfully fetched \");",
+							"            postman.setNextRequest(\"Delete file by file id\");",
+							"        }",
+							"    }",
+							"    else { //240 seconds exceeded",
+							"        pm.test(\"Set time limit is exceeded\", function () {",
+							"            pm.expect.fail();",
+							"        });",
+							"        console.log(\"Stopping tests. 240 seconds exceeded.\");",
+							"        postman.setNextRequest(null);",
+							"        pm.globals.unset(\"timeStamp\");",
+							"    }",
+							"",
+							"}",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "be104dbe-5109-4062-ad37-c2c0ee11593d",
+						"exec": [
+							"setTimeout(function () { }, 5000);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/api/application/{{ApplicationId}}/bankAccount/{{ApplicationAccountId}}/bsa?sessionid={{SESSION_ID}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"application",
+						"{{ApplicationId}}",
+						"bankAccount",
+						"{{ApplicationAccountId}}",
+						"bsa"
+					],
+					"query": [
+						{
+							"key": "sessionid",
+							"value": "{{SESSION_ID}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete file by file id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "0da524de-edbb-43fb-b30b-2b5491c35c9a",
+						"exec": [
+							"var response = pm.response.json();",
+							"pm.globals.set(\"DeletedFile\", pm.globals.get(\"FileId\"));",
+							"",
+							"if (pm.response.status === \"OK\") {",
+							"    pm.test(\"Successfully deleted the file\");",
+							"    postman.setNextRequest(\"Fetch list of files\");",
+							"}",
+							"else if (pm.globals.get(\"DeletedFile\") === pm.globals.get(\"FileId\")) {",
+							"    pm.test(\"End the script, as the file is already deleted\");",
+							"    postman.setNextRequest(null);",
+							"}",
+							"else if(pm.response.status === \"Bad Request\"){",
+							"    pm.test(\"Please check if the file is available for deletion\");",
+							"    postman.setNextRequest(null);",
+							"}",
+							"else{",
+							"    postman.setNextRequest(null);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e6f07223-960f-443a-b71f-a3f631bf3bba",
+						"exec": [
+							"pm.test(\"In pre-request script of delete api\");",
+							"if (pm.globals.get(\"DeletedFile\") === pm.globals.get(\"FileId\")) {",
+							"    pm.test(\"The file is already deleted\", function () {",
+							"            pm.expect.fail();",
+							"        });",
+							"    postman.setNextRequest(null);",
+							"}"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"url": {
+					"raw": "{{URL}}/api/application/{{ApplicationId}}/file/{{FileId}}?sessionid={{SESSION_ID}}",
+					"host": [
+						"{{URL}}"
+					],
+					"path": [
+						"api",
+						"application",
+						"{{ApplicationId}}",
+						"file",
+						"{{FileId}}"
+					],
+					"query": [
+						{
+							"key": "sessionid",
+							"value": "{{SESSION_ID}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "password",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "system",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "d91044f4-a433-464b-b948-5cf530745265",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "6ea77ee5-f601-4c10-ab3f-f64dfb755789",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
